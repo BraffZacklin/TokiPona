@@ -63,6 +63,14 @@ class word():
 				for definition in self.definition[key][1:]:
 					print(f'\t\t\t{definition}')
 
+	def exportDefinitions(self, filename):
+		with open(filename, 'a+') as file:
+			file.write('\t' + str(self.spelling) + '\n')
+			for key in self.definition.keys():
+				file.write('\t\t' + key + ': ' + str(self.definition[key][0]) + '\n')
+				if len(self.definition[key]) > 1:
+					for definition in self.definition[key][1:]:
+						file.write('\t\t\t' + str(definition) + '\n')
 
 class rhymeDictionary():
 	def __init__(self, *words):
@@ -81,7 +89,7 @@ class rhymeDictionary():
 				return word
 		return False
 
-	def findRhymes(self, prototype, lowest=1):
+	def findRhymes(self, prototype, lowest=3):
 		rhymes = {}
 		protoypeSound = getSound(prototype)
 		for word in self.words:
@@ -111,3 +119,7 @@ class rhymeDictionary():
 					else:
 						rhymes[score] = [word]
 		return rhymes
+
+	def printToFile(self, filename):
+		for word in self.words:
+			word.exportDefinitions(filename)

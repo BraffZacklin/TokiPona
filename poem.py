@@ -5,6 +5,7 @@ Entries may be added, but the must follow the format of:
 	usage: definition
 '''
 from toki import *
+from random import sample
 
 rhymeDict = rhymeDictionary()
 
@@ -17,14 +18,34 @@ with open("./dict.txt", "r") as file:
 		line = line.strip()
 		if len(line) != 0:
 			if '//' not in line and ' ' not in line:
-				if '!' in line:
+				if str('!') in line:
 					line = ''.join(line.split('!'))
 				newWord = word(line, fileList[index+1])
 				rhymeDict.addWord(newWord)
 
 print("Dictionary loaded!")
 
-while True:
+while len(rhymeDict.words) != 0:
+	print(len(rhymeDict.words), ' words left')
+	words = sample(rhymeDict.words, 10)
+	for word in words:
+		word.printDefinitions()
+	
+	print("")
+
+	for word in words:
+		print(word.spelling, end=' ')
+
+	remove = input("\nEnter words to remove: ").split(' ')
+	
+	for word in remove:
+		word = rhymeDict.findWord(word)
+		if word == False:
+			continue
+		else:
+			rhymeDict.words.remove(word)
+
+'''
 	print("\nPlease enter one or more words separated by spaces to retrieve rhymes")
 	print("Insert a number at the end of the query only retrieve rhymes with a score of that number or higher (default 3)")
 	print("Alternatively, type 'exit' or 'quit' to close the dictionary")
@@ -54,3 +75,4 @@ while True:
 				print(f'{key} Points:')
 				for result in rhymes[key]:
 					result.printDefinitions()
+'''
